@@ -14,18 +14,18 @@ import java.sql.Statement;
  * @author hazem
  */
 public class Product implements ProjectObject{
-  private static int counter = 0;
   private int id;
   private String name;
   private double price;
   private int quantity;
+  private String producer;
 
-  public Product(String nm, double prc, int q){
-    counter++;
-    setId(counter);
-    setName(nm);
-    setPrice(prc);
-    setQuantity(q);
+  public Product(int id, String name, String producer, double price, int quantity){
+    setId(id);
+    setName(name);
+    setProducer(producer);
+    setPrice(price);
+    setQuantity(quantity);
   }
 
   public void setId(int iden) {
@@ -57,9 +57,19 @@ public class Product implements ProjectObject{
     return quantity;
   }
 
+    public String getProducer() {
+        return producer;
+    }
+
+    public void setProducer(String producer) {
+        this.producer = producer;
+    }
+  
+  
+
   public void update(Connection con) throws SQLException{
       Statement s = con.createStatement();
-      String query = String.format("insert into Employees values(%d,'%s',%d)", 34,name,quantity);
+      String query = String.format("insert into product values(%d,'%s', '%s',%d, %f)", id,name,producer,quantity,price);
       s.executeUpdate(query);
   }
   

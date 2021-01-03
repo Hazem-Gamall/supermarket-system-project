@@ -10,13 +10,19 @@ import javax.swing.JOptionPane;
  *
  * @author hazem
  */
-public class Login extends javax.swing.JFrame {
-
+public class Login extends javax.swing.JFrame {private Welcome w;
     /**
      * Creates new form Login
      */
+    Connection con;
+
     public Login() {
         initComponents();
+        try{
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/supermarket?autoReconnect=true&useSSL=false","project","testProject_1");
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -37,6 +43,12 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
+        setMaximumSize(new java.awt.Dimension(500, 176));
+        setMinimumSize(new java.awt.Dimension(400, 176));
+        setResizable(false);
+
+        jPanel1.setMaximumSize(new java.awt.Dimension(400, 176));
+        jPanel1.setMinimumSize(new java.awt.Dimension(400, 176));
 
         jLabel1.setText("User");
 
@@ -97,6 +109,7 @@ public class Login extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -104,18 +117,21 @@ public class Login extends javax.swing.JFrame {
          String user = jTextField1.getText();
         String password = new String(jPasswordField1.getPassword());
         try{
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/supermarket","project","testProject_1");
             Statement s = con.createStatement();
             String query = String.format("SELECT * FROM user WHERE user_name='%s' and password ='%s'",user,password);
             ResultSet rs = s.executeQuery(query);
+//            System.out.println(rs.next());
             if(rs.next()){
                 JOptionPane.showMessageDialog(null, "You're now Loged in!");
-                this.setVisible(false);
                 Welcome w = new Welcome();
+                this.setVisible(false);
                 w.setVisible(true);
+                this.dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, "Something went Wrong please try again!");
             }
+            
         }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, "Something went Wrong please try again!");
             System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed

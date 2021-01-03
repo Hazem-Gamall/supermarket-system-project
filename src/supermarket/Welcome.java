@@ -14,6 +14,7 @@ public class Welcome extends javax.swing.JFrame {
     /**
      * Creates new form Welcome
      */
+    
     public Welcome() {
         initComponents();
     }
@@ -53,6 +54,11 @@ public class Welcome extends javax.swing.JFrame {
         products.setMaximumSize(new java.awt.Dimension(86, 28));
         products.setMinimumSize(new java.awt.Dimension(86, 28));
         products.setPreferredSize(new java.awt.Dimension(86, 28));
+        products.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                productsActionPerformed(evt);
+            }
+        });
 
         hour_employee.setText("Hourly_Employees");
 
@@ -92,12 +98,20 @@ public class Welcome extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void customersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customersActionPerformed
         // TODO add your handling code here:
-        
     }//GEN-LAST:event_customersActionPerformed
+
+    private void productsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        Product_UI p = new Product_UI();
+        p.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_productsActionPerformed
 
     /**
      * @param args the command line arguments

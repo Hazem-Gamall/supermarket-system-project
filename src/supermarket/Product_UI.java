@@ -5,11 +5,16 @@
  */
 package supermarket;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -20,8 +25,17 @@ public class Product_UI extends javax.swing.JFrame {
     /**
      * Creates new form Product_UI
      */
+    public static Connection con;
+    final String table = "product";
+    
     public Product_UI() {
         initComponents();
+        try{
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/supermarket?autoReconnect=true&useSSL=false","project","testProject_1");
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        
     }
 
     /**
@@ -40,8 +54,14 @@ public class Product_UI extends javax.swing.JFrame {
         backButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(500, 400));
-        setPreferredSize(new java.awt.Dimension(500, 400));
+        setTitle("Products");
+        setMinimumSize(new java.awt.Dimension(530, 400));
+        setPreferredSize(new java.awt.Dimension(530, 400));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -72,6 +92,11 @@ public class Product_UI extends javax.swing.JFrame {
         });
 
         backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -107,10 +132,17 @@ public class Product_UI extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         // TODO add your handling code here:
+        try{
+            ProjectObject.delete(con, table, (int)jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+            jTable1.setModel(DbUtils.resultSetToTableModel(ProjectObject.fetch(con, table)));
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }    
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -118,35 +150,62 @@ public class Product_UI extends javax.swing.JFrame {
         JTextField idField = new JTextField(8);
         JTextField nameField = new JTextField(8);
         JTextField quantityField = new JTextField(8);
-        JTextField exp_dateField = new JTextField(8);
         JTextField producerField = new JTextField(8);
+        JTextField priceField = new JTextField(8);
 
         JPanel myPanel = new JPanel();
         myPanel.add(new JLabel("Id:"));
         myPanel.add(idField);
+        
         myPanel.add(Box.createHorizontalStrut(15)); // a spacer
         myPanel.add(new JLabel("Name:"));
         myPanel.add(nameField);
+        
         myPanel.add(Box.createHorizontalStrut(15)); // a spacer
         myPanel.add(new JLabel("quantity:"));
         myPanel.add(quantityField);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("Expiry_Date:"));
-        myPanel.add(exp_dateField);
+        
         myPanel.add(Box.createHorizontalStrut(15)); // a spacer
         myPanel.add(new JLabel("Producer:"));
         myPanel.add(producerField);
         
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Pice:"));
+        myPanel.add(priceField);
+        
         int x = JOptionPane.showConfirmDialog(null,myPanel,"input",JOptionPane.OK_CANCEL_OPTION);
-        try{
+        try{            
             if(x != JOptionPane.OK_OPTION) throw new Exception("Canceled");
-            String name, exp_date, producer;
+            String name, producer;
             int id, quantity;
-            name = nameField.getText(); exp_date = exp_dateField.getText(); producer = producerField.getText();
-            id = Integer.parseInt(idField.getText()); qunatity = Integer.parseInt(quantityField.getText());        }catch(Exception e){
+            double price;
+            
+            name = nameField.getText();
+            producer = producerField.getText();
+            id = Integer.parseInt(idField.getText());
+            quantity = Integer.parseInt(quantityField.getText());
+            price = Double.parseDouble(priceField.getText());
+            Product product = new Product(id,name,producer,price,quantity);
+            product.update(con);
+            fetch();
+            
+        }catch(Exception e){
             System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+     fetch();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        Welcome w = new Welcome();
+        w.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,6 +240,15 @@ public class Product_UI extends javax.swing.JFrame {
                 new Product_UI().setVisible(true);
             }
         });
+    }
+    
+    private void fetch(){
+           try{
+            ResultSet rs = ProjectObject.fetch(con, "product");
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
