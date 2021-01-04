@@ -103,6 +103,10 @@ public class Welcome extends javax.swing.JFrame {
 
     private void customersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customersActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
+        Customer_UI c = new Customer_UI();
+        c.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_customersActionPerformed
 
     private void productsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsActionPerformed

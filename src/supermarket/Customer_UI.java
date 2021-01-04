@@ -5,6 +5,18 @@
  */
 package supermarket;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.Box;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author hazem
@@ -14,6 +26,9 @@ public class Customer_UI extends javax.swing.JFrame {
     /**
      * Creates new form Customer_UI
      */
+    final String table = "customer";
+
+    
     public Customer_UI() {
         initComponents();
     }
@@ -27,21 +42,151 @@ public class Customer_UI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        addButton = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        addButton.setText("Add");
+        addButton.setMinimumSize(new java.awt.Dimension(65, 28));
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+
+        removeButton.setText("Remove");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
+
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(115, 115, 115)
+                .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                .addGap(120, 120, 120)
+                .addComponent(removeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(148, 148, 148))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(196, 196, 196)
+                .addComponent(backButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(245, 245, 245))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                .addGap(65, 65, 65)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(removeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(backButton)
+                .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+
+        createInputMessage();//create the panel to be shown in the ConfirmDialog
+
+        int x = JOptionPane.showConfirmDialog(null,myPanel,"input",JOptionPane.OK_CANCEL_OPTION);
+
+        if(x == JOptionPane.OK_OPTION){
+            String name, phone_num;
+            String gender;
+            int id;
+
+            //setting the data fields to the input
+            try{
+                name = nameField.getText();
+                id = Integer.parseInt(idField.getText());
+                phone_num = phone_numField.getText();
+                if(phone_num.length() != 11) throw new Exception("the entered number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+                gender = (String)genderBox.getSelectedItem();
+                Customer customer = new Customer(id,name,gender,phone_num);
+
+                try(Connection con = ProjectUtil.getcon()){
+                    customer.update(con);
+                    jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
+                }
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Error! Please make sure to Enter proper values");
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_addButtonActionPerformed
+
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        // TODO add your handling code here:
+        try(Connection con = ProjectUtil.getcon()){
+            ProjectUtil.delete(con, table, (int)jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+            jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_removeButtonActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        Welcome w = new Welcome();
+        w.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        try(Connection con = ProjectUtil.getcon()){
+            jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -77,7 +222,40 @@ public class Customer_UI extends javax.swing.JFrame {
             }
         });
     }
+    
+       private void createInputMessage(){
+        myPanel = new JPanel();
+        myPanel.add(new JLabel("Id:"));
+        myPanel.add(idField);
+        
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Name:"));
+        myPanel.add(nameField);
+        
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Gender:"));
+        myPanel.add(genderBox);
+        
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Phone Number:"));
+        myPanel.add(phone_numField);
+
+        
+    }
+
+    
+    JPanel myPanel = new JPanel();
+    JComboBox<String> genderBox = new JComboBox(new String[]{"M","F"});
+    JTextField idField = new JTextField(8);
+    JTextField nameField = new JTextField(8);
+    JTextField phone_numField = new JTextField(8);
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addButton;
+    private javax.swing.JButton backButton;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JButton removeButton;
     // End of variables declaration//GEN-END:variables
 }

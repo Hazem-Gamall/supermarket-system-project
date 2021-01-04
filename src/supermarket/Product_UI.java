@@ -29,6 +29,7 @@ public class Product_UI extends javax.swing.JFrame {
     
     public Product_UI() {
         initComponents();
+        jTable1.setDefaultEditor(Object.class, null);
         
     }
 
@@ -131,9 +132,9 @@ public class Product_UI extends javax.swing.JFrame {
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         // TODO add your handling code here:
-        try(Connection con = ProjectObject.getcon()){
-            ProjectObject.delete(con, table, (int)jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-            jTable1.setModel(DbUtils.resultSetToTableModel(ProjectObject.fetch(con, table)));
+        try(Connection con = ProjectUtil.getcon()){
+            ProjectUtil.delete(con, table, (int)jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+            jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }    
@@ -159,9 +160,9 @@ public class Product_UI extends javax.swing.JFrame {
                 price = Double.parseDouble(priceField.getText());
                 Product product = new Product(id,name,producer,price,quantity);
             
-                try(Connection con = ProjectObject.getcon()){
+                try(Connection con = ProjectUtil.getcon()){
                     product.update(con);
-                    fetch();
+                    jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
                 }
             }catch(SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
@@ -173,7 +174,11 @@ public class Product_UI extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-     fetch();
+        try(Connection con = ProjectUtil.getcon()){
+            jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
@@ -219,22 +224,6 @@ public class Product_UI extends javax.swing.JFrame {
         });
     }
     
-    private void fetch(){
-           try(Connection con = ProjectObject.getcon()){
-            try(ResultSet rs = ProjectObject.fetch(con, "product"))
-            {
-                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-        }catch(SQLException e){
-            System.out.println(e.getCause());
-//        }finally{
-//               try{
-//                   con.close();
-//               }catch(SQLException e){
-//                   System.out.println(e.getMessage());
-//               }
-           }
-    }
     
     private void createInputMessage(){
         myPanel = new JPanel();
@@ -254,7 +243,7 @@ public class Product_UI extends javax.swing.JFrame {
         myPanel.add(quantityField);
         
         myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("Pice:"));
+        myPanel.add(new JLabel("Price:"));
         myPanel.add(priceField);
         
     }
