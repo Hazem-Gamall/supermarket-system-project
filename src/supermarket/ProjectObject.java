@@ -16,18 +16,30 @@ import net.proteanit.sql.DbUtils;
  *
  * @author hazem
  */
-public interface ProjectObject {
-     void update(Connection con) throws SQLException;
+public abstract class ProjectObject {
+    public final static String URL = "jdbc:sqlite:supermarket.db";
+    private static Connection con = null;
+    public static Connection getcon() throws SQLException{
+        if(con == null){
+            con = DriverManager.getConnection(URL);
+        }else{
+           con.close();
+           con = DriverManager.getConnection(URL);
+        }
+        return con;
+    }
+    
+    public abstract void update(Connection con) throws SQLException;
      
-     static ResultSet fetch(Connection con, String table) throws SQLException{
+    public static ResultSet fetch(Connection con, String table) throws SQLException{
         Statement s = con.createStatement();
-        String query = String.format("select * from %s", table);
+        String query = String.format("SELECT * FROM %s", table);
         ResultSet r = s.executeQuery(query);
         return r;
-     }
-     static void delete(Connection con, String table, int id) throws SQLException{
+    }
+    public static void delete(Connection con, String table, int id) throws SQLException{
         Statement s = con.createStatement();
-        String query = String.format("delete from %s where %s_id ='%d'",table,table, id);
+        String query = String.format("DELETE FROM %s WHERE %s_id ='%d'",table,table, id);
         int r = s.executeUpdate(query);
-     }
+    }
 }

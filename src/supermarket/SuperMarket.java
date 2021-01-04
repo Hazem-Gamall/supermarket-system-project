@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package supermarket;
-
+import java.sql.*;
 /**
  *
  * @author hazem
@@ -15,8 +15,8 @@ public class SuperMarket {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Product p = new Product("cheese",19.5,1);
-        System.out.println(p.toString());
+//        Product p = new Product("cheese",19.5,1);
+//        System.out.println(p.toString());
         
         Employee e = new Employee("omar",26,341,3456.5){
             @Override

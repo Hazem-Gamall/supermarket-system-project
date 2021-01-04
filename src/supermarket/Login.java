@@ -14,15 +14,9 @@ public class Login extends javax.swing.JFrame {private Welcome w;
     /**
      * Creates new form Login
      */
-    Connection con;
 
     public Login() {
         initComponents();
-        try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/supermarket?autoReconnect=true&useSSL=false","project","testProject_1");
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
-        }
     }
 
     /**
@@ -116,21 +110,22 @@ public class Login extends javax.swing.JFrame {private Welcome w;
         // TODO add your handling code here:
          String user = jTextField1.getText();
         String password = new String(jPasswordField1.getPassword());
-        try{
+        try(Connection con = ProjectObject.getcon()){
             Statement s = con.createStatement();
             String query = String.format("SELECT * FROM user WHERE user_name='%s' and password ='%s'",user,password);
-            ResultSet rs = s.executeQuery(query);
-//            System.out.println(rs.next());
+            
+           try(ResultSet rs = s.executeQuery(query)){
             if(rs.next()){
                 JOptionPane.showMessageDialog(null, "You're now Loged in!");
                 Welcome w = new Welcome();
                 this.setVisible(false);
                 w.setVisible(true);
                 this.dispose();
+            
             }else{
                 JOptionPane.showMessageDialog(null, "Something went Wrong please try again!");
-            }
-            
+            } 
+           }
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }

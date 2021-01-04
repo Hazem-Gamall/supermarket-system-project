@@ -25,16 +25,10 @@ public class Product_UI extends javax.swing.JFrame {
     /**
      * Creates new form Product_UI
      */
-    public static Connection con;
     final String table = "product";
     
     public Product_UI() {
         initComponents();
-        try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/supermarket?autoReconnect=true&useSSL=false","project","testProject_1");
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
         
     }
 
@@ -137,7 +131,7 @@ public class Product_UI extends javax.swing.JFrame {
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         // TODO add your handling code here:
-        try{
+        try(Connection con = ProjectObject.getcon()){
             ProjectObject.delete(con, table, (int)jTable1.getValueAt(jTable1.getSelectedRow(), 0));
             jTable1.setModel(DbUtils.resultSetToTableModel(ProjectObject.fetch(con, table)));
         }catch(SQLException e){
@@ -146,51 +140,34 @@ public class Product_UI extends javax.swing.JFrame {
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        // TODO add your handling code here:
-        JTextField idField = new JTextField(8);
-        JTextField nameField = new JTextField(8);
-        JTextField quantityField = new JTextField(8);
-        JTextField producerField = new JTextField(8);
-        JTextField priceField = new JTextField(8);
 
-        JPanel myPanel = new JPanel();
-        myPanel.add(new JLabel("Id:"));
-        myPanel.add(idField);
-        
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("Name:"));
-        myPanel.add(nameField);
-        
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("quantity:"));
-        myPanel.add(quantityField);
-        
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("Producer:"));
-        myPanel.add(producerField);
-        
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("Pice:"));
-        myPanel.add(priceField);
+        createInputMessage();//create the panel to be shown in the ConfirmDialog
         
         int x = JOptionPane.showConfirmDialog(null,myPanel,"input",JOptionPane.OK_CANCEL_OPTION);
-        try{            
-            if(x != JOptionPane.OK_OPTION) throw new Exception("Canceled");
+                    
+        if(x == JOptionPane.OK_OPTION){
             String name, producer;
             int id, quantity;
             double price;
             
-            name = nameField.getText();
-            producer = producerField.getText();
-            id = Integer.parseInt(idField.getText());
-            quantity = Integer.parseInt(quantityField.getText());
-            price = Double.parseDouble(priceField.getText());
-            Product product = new Product(id,name,producer,price,quantity);
-            product.update(con);
-            fetch();
+            //setting the data fields to the input
+            try{
+                name = nameField.getText();
+                producer = producerField.getText();
+                id = Integer.parseInt(idField.getText());
+                quantity = Integer.parseInt(quantityField.getText());
+                price = Double.parseDouble(priceField.getText());
+                Product product = new Product(id,name,producer,price,quantity);
             
-        }catch(Exception e){
-            System.out.println(e.getMessage());
+                try(Connection con = ProjectObject.getcon()){
+                    product.update(con);
+                    fetch();
+                }
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Error! Please make sure to Enter proper values");
+            }
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
@@ -243,14 +220,52 @@ public class Product_UI extends javax.swing.JFrame {
     }
     
     private void fetch(){
-           try{
-            ResultSet rs = ProjectObject.fetch(con, "product");
-            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+           try(Connection con = ProjectObject.getcon()){
+            try(ResultSet rs = ProjectObject.fetch(con, "product"))
+            {
+                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+            }
         }catch(SQLException e){
-            System.out.println(e.getMessage());
-        }
+            System.out.println(e.getCause());
+//        }finally{
+//               try{
+//                   con.close();
+//               }catch(SQLException e){
+//                   System.out.println(e.getMessage());
+//               }
+           }
+    }
+    
+    private void createInputMessage(){
+        myPanel = new JPanel();
+        myPanel.add(new JLabel("Id:"));
+        myPanel.add(idField);
+        
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Name:"));
+        myPanel.add(nameField);
+        
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Producer:"));
+        myPanel.add(producerField);
+        
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("quantity:"));
+        myPanel.add(quantityField);
+        
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Pice:"));
+        myPanel.add(priceField);
+        
     }
 
+    
+    JPanel myPanel = new JPanel();
+    JTextField idField = new JTextField(8);
+    JTextField nameField = new JTextField(8);
+    JTextField quantityField = new JTextField(8);
+    JTextField producerField = new JTextField(8);
+    JTextField priceField = new JTextField(8);
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton backButton;
