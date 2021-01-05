@@ -9,17 +9,19 @@ package supermarket;
  *
  * @author hazem
  */
-public abstract class Employee implements Person {
+public abstract class Employee extends ProjectUtil implements Person {
     private String name;
     private int age;
     private int id;
+    private String phone_num;
     protected double salary;
     
-    public Employee(String name, int age, int id, double salary){
+    
+    public Employee(int id, String name, int age, String phone_num){
+        this.id = id;
         this.name = name;
         this.age = age;
-        this.id = id;
-        this.salary = salary;
+        this.phone_num = phone_num;
     }
     
     @Override
@@ -50,7 +52,20 @@ public abstract class Employee implements Person {
     public int getId(){
         return id;
     }
+    @Override
+    public void setPhoneNum(String phone_num){
+        this.phone_num = phone_num;
+    }
+    @Override
+    public String getPhoneNum(){
+        return phone_num;
+    }
     
-    public abstract void setSalary(double salary);
-    public abstract double getSalary();
+    public double getSalary(){
+        return salary;
+    }
+    
+    public abstract void setSalary();
+
+    
 }

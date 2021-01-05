@@ -52,6 +52,7 @@ public class Product_UI extends javax.swing.JFrame {
         setTitle("Products");
         setMinimumSize(new java.awt.Dimension(530, 400));
         setPreferredSize(new java.awt.Dimension(530, 400));
+        setSize(new java.awt.Dimension(530, 400));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);

@@ -31,6 +31,8 @@ public class Customer_UI extends javax.swing.JFrame {
     
     public Customer_UI() {
         initComponents();
+        jTable1.setDefaultEditor(Object.class, null);
+
     }
 
     /**
@@ -49,6 +51,8 @@ public class Customer_UI extends javax.swing.JFrame {
         backButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Customers");
+        setSize(new java.awt.Dimension(530, 400));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -127,6 +131,33 @@ public class Customer_UI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        try(Connection con = ProjectUtil.getcon()){
+            jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        Welcome w = new Welcome();
+        w.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
+
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        // TODO add your handling code here:
+        try(Connection con = ProjectUtil.getcon()){
+            ProjectUtil.delete(con, table, (int)jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+            jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_removeButtonActionPerformed
+
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
 
         createInputMessage();//create the panel to be shown in the ConfirmDialog
@@ -160,33 +191,6 @@ public class Customer_UI extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_addButtonActionPerformed
-
-    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        // TODO add your handling code here:
-        try(Connection con = ProjectUtil.getcon()){
-            ProjectUtil.delete(con, table, (int)jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-            jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }//GEN-LAST:event_removeButtonActionPerformed
-
-    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
-        Welcome w = new Welcome();
-        w.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_backButtonActionPerformed
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
-        try(Connection con = ProjectUtil.getcon()){
-            jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments

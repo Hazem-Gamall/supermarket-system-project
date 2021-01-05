@@ -16,4 +16,6 @@ public interface Person {
     int getAge();
     void setId(int id);
     int getId();
+    void setPhoneNum(String phone_num);
+    String getPhoneNum();
 }
