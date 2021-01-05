@@ -18,7 +18,7 @@ import net.proteanit.sql.DbUtils;
  * @author hazem
  */
 public abstract class ProjectUtil {
-    public final static String URL = "jdbc:sqlite:supermarket.db";
+    public final static String URL = "jdbc:sqlite::resource:supermarket.db";
     private static Connection con = null;
     public static Connection getcon() throws SQLException{
         if(con == null){

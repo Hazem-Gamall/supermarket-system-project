@@ -132,11 +132,11 @@ public class Login extends javax.swing.JFrame {private Welcome w;
                 this.dispose();
             
             }else{
-                JOptionPane.showMessageDialog(null, "Something went Wrong please try again!");
+                JOptionPane.showMessageDialog(null, "Wrong Password or User, Please try again!");
             } 
            }
         }catch(SQLException e){
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,e.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

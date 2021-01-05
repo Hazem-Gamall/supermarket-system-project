@@ -49,6 +49,7 @@ public class SalEmployeeUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Salaried Employees");
         setAutoRequestFocus(false);
+        setMinimumSize(new java.awt.Dimension(530, 400));
         setPreferredSize(new java.awt.Dimension(530, 400));
         setSize(new java.awt.Dimension(530, 400));
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -147,7 +148,8 @@ public class SalEmployeeUI extends javax.swing.JFrame {
                 id = Integer.parseInt(idField.getText());
                 age = Integer.parseInt(ageField.getText());
                 phone_num = phone_numField.getText();
-                if(phone_num.length() != 11) throw new Exception("the entered number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+                Long.parseLong(phone_num);
+                if(phone_num.length() != 11) throw new Exception("the entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
                 deduction = Double.parseDouble(deductionField.getText());
                 bonus = Double.parseDouble(bonusField.getText());
                 base_salary = Double.parseDouble(baseSalaryField.getText());
@@ -174,6 +176,8 @@ public class SalEmployeeUI extends javax.swing.JFrame {
             jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
+        }catch(ArrayIndexOutOfBoundsException e){
+            JOptionPane.showMessageDialog(null, "Please Select a row to remove.");
         }
     }//GEN-LAST:event_removeButtonActionPerformed
 

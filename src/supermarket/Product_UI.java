@@ -138,6 +138,8 @@ public class Product_UI extends javax.swing.JFrame {
             jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
         }catch(SQLException e){
             System.out.println(e.getMessage());
+        }catch(ArrayIndexOutOfBoundsException e){
+            JOptionPane.showMessageDialog(null, "Please Select a row to remove.");
         }    
     }//GEN-LAST:event_removeButtonActionPerformed
 

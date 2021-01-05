@@ -6,8 +6,6 @@
 package supermarket;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.Box;
 import javax.swing.JComboBox;
@@ -15,7 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -52,6 +49,8 @@ public class Customer_UI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Customers");
+        setMinimumSize(new java.awt.Dimension(530, 400));
+        setPreferredSize(new java.awt.Dimension(530, 400));
         setSize(new java.awt.Dimension(530, 400));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
@@ -155,6 +154,8 @@ public class Customer_UI extends javax.swing.JFrame {
             jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
+        }catch(ArrayIndexOutOfBoundsException e){
+            JOptionPane.showMessageDialog(null, "Please Select a row to remove.");
         }
     }//GEN-LAST:event_removeButtonActionPerformed
 
@@ -174,7 +175,8 @@ public class Customer_UI extends javax.swing.JFrame {
                 name = nameField.getText();
                 id = Integer.parseInt(idField.getText());
                 phone_num = phone_numField.getText();
-                if(phone_num.length() != 11) throw new Exception("the entered number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+                Long.parseLong(phone_num);
+                if(phone_num.length() != 11) throw new Exception("the entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
                 gender = (String)genderBox.getSelectedItem();
                 Customer customer = new Customer(id,name,gender,phone_num);
 
@@ -249,7 +251,7 @@ public class Customer_UI extends javax.swing.JFrame {
 
     
     JPanel myPanel = new JPanel();
-    JComboBox<String> genderBox = new JComboBox(new String[]{"M","F"});
+    JComboBox<String> genderBox = new JComboBox<>(new String[]{"M","F"});
     JTextField idField = new JTextField(8);
     JTextField nameField = new JTextField(8);
     JTextField phone_numField = new JTextField(8);
