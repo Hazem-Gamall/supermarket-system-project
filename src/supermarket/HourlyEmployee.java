@@ -22,18 +22,35 @@ public class HourlyEmployee extends Employee {
         super(id, name, age, phone_num);
         this.hour_rate = hour_rate;
         this.hours = hours;
-        setSalary();
+        calculateSalary();
     }
     
+    public double getHourRate() {
+        return hour_rate;
+    }
+
+    public void setHourRate(double hour_rate) {
+        this.hour_rate = hour_rate;
+    }
+
+    public double getHours() {
+        return hours;
+    }
+
+    public void setHours(double hours) {
+        this.hours = hours;
+    }
+    
+    
     @Override
-    public void setSalary(){
-        salary = hour_rate * hours;
+    public void calculateSalary(){
+        setSalary(hour_rate * hours);
     }
     
     @Override
     public void update(Connection con) throws SQLException{
         Statement s = con.createStatement();
-        String query = String.format("insert into hourly_employee values(%d,'%s', '%d','%s', %f, %f, %f)", getId(), getName(), getAge(), getPhoneNum(), hour_rate, hours ,salary);
+        String query = String.format("insert into hourly_employee values(%d,'%s', '%d','%s', %f, %f, %f)", getId(), getName(), getAge(), getPhoneNum(), hour_rate, hours , getSalary());
         s.executeUpdate(query);
     }
     

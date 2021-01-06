@@ -23,17 +23,44 @@ public class SalariedEmployee extends Employee{
         this.deduction = deduction;
         this.bonus = bonus;
         this.base_salary = base_salary;
+        calculateSalary();
+    }
+    
+    public double getDeduction() {
+        return deduction;
+    }
+
+    public void setDeduction(double deduction) {
+        this.deduction = deduction;
+    }
+
+    public double getBonus() {
+        return bonus;
+    }
+
+    public void setBonus(double bonus) {
+        this.bonus = bonus;
+    }
+
+    public double getBaseSalary() {
+        return base_salary;
+    }
+
+    public void setBaseSalary(double base_salary) {
+        this.base_salary = base_salary;
     }
     
     @Override
-    public void setSalary(){
-        salary = base_salary - deduction + bonus;
+    public void calculateSalary(){
+        setSalary(base_salary + bonus - deduction);
     }
+
+    
     
     @Override
     public void update(Connection con) throws SQLException{
         Statement s = con.createStatement();
-        String query = String.format("insert into salaried_employee values(%d, '%s', '%d', '%s', %f, %f, %f)", getId(), getName(), getAge(), getPhoneNum(), deduction, bonus ,salary);
+        String query = String.format("insert into salaried_employee values(%d, '%s', '%d', '%s', %f, %f, %f, %f)", getId(), getName(), getAge(), getPhoneNum(), deduction, bonus ,base_salary, getSalary());
         s.executeUpdate(query);
     }
 }

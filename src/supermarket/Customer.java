@@ -13,8 +13,9 @@ import java.sql.Statement;
  *
  * @author hazem
  */
-public class Customer extends ProjectUtil{
+public class Customer extends ProjectUtil implements Person{
     private int id;
+    private int age;
     private String name;
     private String gender;
     private String phone_num;
@@ -35,6 +36,14 @@ public class Customer extends ProjectUtil{
     public String getName(){
         return name;
     }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
     
     public void setId(int id){
         this.id = id;
@@ -43,24 +52,22 @@ public class Customer extends ProjectUtil{
     public int getId(){
         return id;
     }
-
+    
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+        
     public String getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getPhone_num() {
-        return phone_num;
-    }
-
-    public void setPhone_num(String phone_num) {
+    public void setPhoneNum(String phone_num) {
         this.phone_num = phone_num;
     }
     
-    
+    public String getPhoneNum() {
+        return phone_num;
+    }
     
     @Override
     public void update(Connection con) throws SQLException{

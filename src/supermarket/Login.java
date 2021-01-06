@@ -119,7 +119,7 @@ public class Login extends javax.swing.JFrame {private Welcome w;
         // TODO add your handling code here:
          String user = jTextField1.getText();
         String password = new String(jPasswordField1.getPassword());
-        try(Connection con = ProjectUtil.getcon()){
+        try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection
             Statement s = con.createStatement();
             String query = String.format("SELECT * FROM user WHERE user_name='%s' and password ='%s'",user,password);
             

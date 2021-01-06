@@ -10,11 +10,11 @@ package supermarket;
  * @author hazem
  */
 public abstract class Employee extends ProjectUtil implements Person {
+    private int id;
     private String name;
     private int age;
-    private int id;
     private String phone_num;
-    protected double salary;
+    private double salary;
     
     
     public Employee(int id, String name, int age, String phone_num){
@@ -61,11 +61,15 @@ public abstract class Employee extends ProjectUtil implements Person {
         return phone_num;
     }
     
+    public void setSalary(double salary){
+        this.salary = salary;
+    }
+    
     public double getSalary(){
         return salary;
     }
     
-    public abstract void setSalary();
+    public abstract void calculateSalary();
 
     
 }
