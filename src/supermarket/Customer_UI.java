@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -178,17 +179,27 @@ public class Customer_UI extends javax.swing.JFrame {
         if(x == JOptionPane.OK_OPTION){
             String name, phone_num;
             String gender;
-            int id;
+            int id, age;
 
             //setting the data fields to the input
             try{
-                name = nameField.getText();
                 id = Integer.parseInt(idField.getText());
+                
+                if(nameField.getText().matches("[a-zA-Z]+")){
+                    name = nameField.getText();
+                }else{
+                    throw new Exception("Please enter a Proper name.");
+                }
+                
+                age = Integer.parseInt(ageField.getText());
+                
                 phone_num = phone_numField.getText();
                 Long.parseLong(phone_num);
-                if(phone_num.length() != 11) throw new Exception("the entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+                if(phone_num.length() != 11) throw new Exception("The entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+                
                 gender = (String)genderBox.getSelectedItem();
-                Customer customer = new Customer(id,name,gender,phone_num);
+                
+                Customer customer = new Customer(id, name, age, gender, phone_num);
 
                 try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection
                     customer.update(con);
@@ -249,6 +260,10 @@ public class Customer_UI extends javax.swing.JFrame {
         myPanel.add(nameField);
         
         myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Age:"));
+        myPanel.add(ageField);
+        
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
         myPanel.add(new JLabel("Gender:"));
         myPanel.add(genderBox);
         
@@ -264,6 +279,7 @@ public class Customer_UI extends javax.swing.JFrame {
     JComboBox<String> genderBox = new JComboBox<>(new String[]{"Male","Female"});
     JTextField idField = new JTextField(8);
     JTextField nameField = new JTextField(8);
+    JTextField ageField = new JTextField(8);
     JTextField phone_numField = new JTextField(8);
     
 

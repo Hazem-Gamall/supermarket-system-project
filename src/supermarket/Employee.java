@@ -17,10 +17,10 @@ public abstract class Employee extends ProjectUtil implements Person {
     private double salary;
     
     
-    public Employee(int id, String name, int age, String phone_num){
+    public Employee(int id, String name, int age, String phone_num) throws Exception {
         this.id = id;
         this.name = name;
-        this.age = age;
+        setAge(age);
         this.phone_num = phone_num;
     }
     
@@ -34,8 +34,8 @@ public abstract class Employee extends ProjectUtil implements Person {
     }
     @Override
     public void setAge(int age) throws Exception{
-        if(age < 18 && age > 60){
-            throw new Exception("the age you entered Invalid");
+        if(age < 18 || age > 60){
+            throw new Exception("the age you entered is Invalid, Make sure age is between 18 and 60");
         }else{
             this.age = age;
         }

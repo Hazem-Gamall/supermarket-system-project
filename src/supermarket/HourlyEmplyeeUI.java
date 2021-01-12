@@ -153,14 +153,21 @@ public class HourlyEmplyeeUI extends javax.swing.JFrame {
 
             //setting the data fields to the input
             try{
-                name = nameField.getText();
-                id = Integer.parseInt(idField.getText());
-                age = Integer.parseInt(ageField.getText());
+                if(nameField.getText().matches("[a-zA-Z]+")){
+                    name = nameField.getText();
+                }else{
+                    throw new Exception("Please enter a Proper name.");
+                }
+                
                 phone_num = phone_numField.getText();
                 Long.parseLong(phone_num);
-                if(phone_num.length() != 11) throw new Exception("the entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+                if(phone_num.length() != 11) throw new Exception("The entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+                
+                id = Integer.parseInt(idField.getText());
+                age = Integer.parseInt(ageField.getText());       
                 hour_rate = Double.parseDouble(hourRateField.getText());
                 hours = Double.parseDouble(hoursField.getText());
+                
                 HourlyEmployee hourEmp = new HourlyEmployee(id, name, age, phone_num, hour_rate, hours);
 
                 try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection

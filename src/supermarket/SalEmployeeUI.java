@@ -154,15 +154,22 @@ public class SalEmployeeUI extends javax.swing.JFrame {
 
             //setting the data fields to the input
             try{
-                name = nameField.getText();
-                id = Integer.parseInt(idField.getText());
-                age = Integer.parseInt(ageField.getText());
+                if(nameField.getText().matches("[a-zA-Z]+")){
+                    name = nameField.getText();
+                }else{
+                    throw new Exception("Please enter a Proper name.");
+                }
+                
                 phone_num = phone_numField.getText();
                 Long.parseLong(phone_num);
-                if(phone_num.length() != 11) throw new Exception("the entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+                if(phone_num.length() != 11) throw new Exception("The entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+                
+                id = Integer.parseInt(idField.getText());
+                age = Integer.parseInt(ageField.getText());
                 deduction = Double.parseDouble(deductionField.getText());
                 bonus = Double.parseDouble(bonusField.getText());
                 base_salary = Double.parseDouble(baseSalaryField.getText());
+                
                 SalariedEmployee salEmp = new SalariedEmployee(id, name, age, phone_num, deduction, bonus, base_salary);
 
                 try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection

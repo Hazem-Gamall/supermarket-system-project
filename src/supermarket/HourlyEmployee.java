@@ -18,7 +18,7 @@ public class HourlyEmployee extends Employee {
     private double hours;
 
     
-    public HourlyEmployee(int id, String name, int age,  String phone_num, double hour_rate, double hours){
+    public HourlyEmployee(int id, String name, int age,  String phone_num, double hour_rate, double hours) throws Exception{
         super(id, name, age, phone_num);
         this.hour_rate = hour_rate;
         this.hours = hours;

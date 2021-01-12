@@ -18,7 +18,7 @@ public class SalariedEmployee extends Employee{
     private double bonus;
     private double base_salary;
     
-    public SalariedEmployee(int id, String name, int age,  String phone_num, double deduction, double bonus, double base_salary){
+    public SalariedEmployee(int id, String name, int age,  String phone_num, double deduction, double bonus, double base_salary) throws Exception{
         super(id, name, age, phone_num);
         this.deduction = deduction;
         this.bonus = bonus;
