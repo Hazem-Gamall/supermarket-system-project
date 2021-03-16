@@ -147,30 +147,26 @@ public class SalEmployeeUI extends javax.swing.JFrame {
         int x = JOptionPane.showConfirmDialog(null,myPanel,"input",JOptionPane.OK_CANCEL_OPTION);
 
         if(x == JOptionPane.OK_OPTION){
-            String name, phone_num;
-            int id, age;
-            double deduction, bonus, base_salary;
-
-
             //setting the data fields to the input
+            SalariedEmployee salEmp = null;
             try{
+                Long.parseLong(phone_numField.getText());
+                if(phone_numField.getText().length() != 11)
+                    throw new Exception("The entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+
                 if(nameField.getText().matches("[a-zA-Z]+")){
-                    name = nameField.getText();
+                        salEmp = new SalariedEmployee(
+                        new PersonSpec(nameField.getText(),
+                        phone_numField.getText(),
+                        Integer.parseInt(ageField.getText()),
+                        Integer.parseInt(idField.getText())),
+                        Double.parseDouble(baseSalaryField.getText()),
+                        Double.parseDouble(deductionField.getText()),
+                        Double.parseDouble(bonusField.getText()));
                 }else{
                     throw new Exception("Please enter a Proper name.");
-                }
+                }     
                 
-                phone_num = phone_numField.getText();
-                Long.parseLong(phone_num);
-                if(phone_num.length() != 11) throw new Exception("The entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
-                
-                id = Integer.parseInt(idField.getText());
-                age = Integer.parseInt(ageField.getText());
-                deduction = Double.parseDouble(deductionField.getText());
-                bonus = Double.parseDouble(bonusField.getText());
-                base_salary = Double.parseDouble(baseSalaryField.getText());
-                
-                SalariedEmployee salEmp = new SalariedEmployee(id, name, age, phone_num, deduction, bonus, base_salary);
 
                 try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection
                     salEmp.update(con);

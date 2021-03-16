@@ -147,29 +147,30 @@ public class HourlyEmplyeeUI extends javax.swing.JFrame {
         int x = JOptionPane.showConfirmDialog(null,myPanel,"input",JOptionPane.OK_CANCEL_OPTION);
 
         if(x == JOptionPane.OK_OPTION){
-            String name, phone_num;
-            int id, age;
-            double hour_rate, hours;
 
             //setting the data fields to the input
             try{
+                
+                HourlyEmployee hourEmp = null;
+                
+                Long.parseLong(phone_numField.getText());
+                if(phone_numField.getText().length() != 11) throw new Exception("The entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
+                
+                
                 if(nameField.getText().matches("[a-zA-Z]+")){
-                    name = nameField.getText();
+
+                    hourEmp = new HourlyEmployee(new PersonSpec(nameField.getText(),
+                            phone_numField.getText(),
+                            Integer.parseInt(ageField.getText()),
+                            Integer.parseInt(idField.getText())),
+                            Double.parseDouble(hourRateField.getText()),
+                            Double.parseDouble(hoursField.getText()));
+
                 }else{
                     throw new Exception("Please enter a Proper name.");
                 }
-                
-                phone_num = phone_numField.getText();
-                Long.parseLong(phone_num);
-                if(phone_num.length() != 11) throw new Exception("The entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
-                
-                id = Integer.parseInt(idField.getText());
-                age = Integer.parseInt(ageField.getText());       
-                hour_rate = Double.parseDouble(hourRateField.getText());
-                hours = Double.parseDouble(hoursField.getText());
-                
-                HourlyEmployee hourEmp = new HourlyEmployee(id, name, age, phone_num, hour_rate, hours);
 
+                
                 try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection
                     hourEmp.update(con);
                     jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));

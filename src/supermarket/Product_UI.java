@@ -160,23 +160,19 @@ public class Product_UI extends javax.swing.JFrame {
         int x = JOptionPane.showConfirmDialog(null,myPanel,"input",JOptionPane.OK_CANCEL_OPTION);
                     
         if(x == JOptionPane.OK_OPTION){
-            String name, producer;
-            int id, quantity;
-            double price;
-            
             //setting the data fields to the input
             try{
-                name = nameField.getText();
-                producer = producerField.getText();
-                id = Integer.parseInt(idField.getText());
-                quantity = Integer.parseInt(quantityField.getText());
-                price = Double.parseDouble(priceField.getText());
-                Product product = new Product(id,name,producer,price,quantity);
+                Product product = new Product(Integer.parseInt(idField.getText()),
+                        nameField.getText(),
+                        producerField.getText(),
+                        Double.parseDouble(priceField.getText()),
+                        Integer.parseInt(quantityField.getText()));
             
                 try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection
                     product.update(con);
                     jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
                 }
+                
             }catch(SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }catch(NumberFormatException e){

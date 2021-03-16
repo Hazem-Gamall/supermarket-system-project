@@ -16,14 +16,11 @@ import java.sql.Statement;
 public class SalariedEmployee extends Employee{
     private double deduction;
     private double bonus;
-    private double base_salary;
     
-    public SalariedEmployee(int id, String name, int age,  String phone_num, double deduction, double bonus, double base_salary) throws Exception{
-        super(id, name, age, phone_num);
+    public SalariedEmployee(PersonSpec spec, double salary, double deduction, double bonus) throws Exception{
+        super(spec, salary);
         this.deduction = deduction;
         this.bonus = bonus;
-        this.base_salary = base_salary;
-        calculateSalary();
     }
     
     public double getDeduction() {
@@ -41,18 +38,10 @@ public class SalariedEmployee extends Employee{
     public void setBonus(double bonus) {
         this.bonus = bonus;
     }
-
-    public double getBaseSalary() {
-        return base_salary;
-    }
-
-    public void setBaseSalary(double base_salary) {
-        this.base_salary = base_salary;
-    }
     
     @Override
-    public void calculateSalary(){
-        setSalary(base_salary + bonus - deduction);
+    public double getSalary(){
+        return (super.getSalary() + bonus - deduction);
     }
 
     
@@ -60,7 +49,8 @@ public class SalariedEmployee extends Employee{
     @Override
     public void update(Connection con) throws SQLException{
         Statement s = con.createStatement();
-        String query = String.format("insert into salaried_employee values(%d, '%s', '%d', '%s', %f, %f, %f, %f)", getId(), getName(), getAge(), getPhoneNum(), deduction, bonus ,base_salary, getSalary());
+        //Bad design
+        String query = String.format("insert into salaried_employee values(%d, '%s', '%d', '%s', %f, %f, %f, %f)", spec.getId(), spec.getName(), spec.getAge(), spec.getPhoneNum(), deduction, bonus , super.getSalary(), getSalary());
         s.executeUpdate(query);
     }
 }

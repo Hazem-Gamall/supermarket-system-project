@@ -13,7 +13,7 @@ import java.sql.Statement;
  *
  * @author hazem
  */
-public class Product extends ProjectUtil{
+public class Product implements Updatable{
     private int id;
     private String name;
     private double price;

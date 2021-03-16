@@ -177,29 +177,32 @@ public class Customer_UI extends javax.swing.JFrame {
         int x = JOptionPane.showConfirmDialog(null,myPanel,"input",JOptionPane.OK_CANCEL_OPTION);
 
         if(x == JOptionPane.OK_OPTION){
-            String name, phone_num;
-            String gender;
-            int id, age;
 
             //setting the data fields to the input
-            try{
-                id = Integer.parseInt(idField.getText());
+            try{       
+                Customer customer = null;
+                
+                Long.parseLong(phone_numField.getText());
+                if(phone_numField.getText().length() != 11)
+                    throw new Exception("The entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
                 
                 if(nameField.getText().matches("[a-zA-Z]+")){
-                    name = nameField.getText();
+                    
+                    customer = new Customer(
+                        new PersonSpec(nameField.getText(),
+                        phone_numField.getText(),
+                        Integer.parseInt(ageField.getText()),
+                        Integer.parseInt(idField.getText())),
+                        (String)genderBox.getSelectedItem());
+                    
                 }else{
                     throw new Exception("Please enter a Proper name.");
                 }
                 
-                age = Integer.parseInt(ageField.getText());
+             
+               
+          
                 
-                phone_num = phone_numField.getText();
-                Long.parseLong(phone_num);
-                if(phone_num.length() != 11) throw new Exception("The entered phone number is incorrect, please make sure it's an egyptian phone number with 11 digits.");
-                
-                gender = (String)genderBox.getSelectedItem();
-                
-                Customer customer = new Customer(id, name, age, gender, phone_num);
 
                 try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection
                     customer.update(con);

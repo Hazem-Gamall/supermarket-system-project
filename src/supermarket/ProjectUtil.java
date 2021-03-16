@@ -44,7 +44,5 @@ public abstract class ProjectUtil {
         String query = String.format("DELETE FROM %s WHERE %s_id ='%d'",table,table, id);
         int r = s.executeUpdate(query);
     }
-    
-    public abstract void update(Connection con) throws SQLException;
 
 }

@@ -5,19 +5,13 @@
  */
 package supermarket;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  *
  * @author hazem
  */
-public abstract class Person {
-    
-    PersonSpec spec;
-
-    public Person(PersonSpec spec){
-        this.spec = spec;
-    }
-    
-    public PersonSpec getSpec(){
-        return spec;
-    }
+public interface Updatable {
+        void update(Connection con) throws SQLException;
 }

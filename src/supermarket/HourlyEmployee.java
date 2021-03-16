@@ -18,11 +18,10 @@ public class HourlyEmployee extends Employee {
     private double hours;
 
     
-    public HourlyEmployee(int id, String name, int age,  String phone_num, double hour_rate, double hours) throws Exception{
-        super(id, name, age, phone_num);
+    public HourlyEmployee(PersonSpec spec, double hour_rate, double hours) throws Exception{
+        super(spec, 0);
         this.hour_rate = hour_rate;
         this.hours = hours;
-        calculateSalary();
     }
     
     public double getHourRate() {
@@ -43,14 +42,14 @@ public class HourlyEmployee extends Employee {
     
     
     @Override
-    public void calculateSalary(){
-        setSalary(hour_rate * hours);
+    public double getSalary(){
+        return (hour_rate * hours);
     }
     
     @Override
     public void update(Connection con) throws SQLException{
         Statement s = con.createStatement();
-        String query = String.format("insert into hourly_employee values(%d,'%s', '%d','%s', %f, %f, %f)", getId(), getName(), getAge(), getPhoneNum(), hour_rate, hours , getSalary());
+        String query = String.format("insert into hourly_employee values(%d,'%s', '%d','%s', %f, %f, %f)", spec.getId(), spec.getName(), spec.getAge(), spec.getPhoneNum(), hour_rate, hours , getSalary());
         s.executeUpdate(query);
     }
     
