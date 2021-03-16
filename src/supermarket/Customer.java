@@ -14,7 +14,6 @@ import java.sql.Statement;
  * @author hazem
  */
 public class Customer extends Person implements Updatable{
-    private PersonSpec spec;
     private String gender;
     
     
@@ -35,7 +34,7 @@ public class Customer extends Person implements Updatable{
     @Override
     public void update(Connection con) throws SQLException{
         Statement s = con.createStatement();
-        String query = String.format("insert into customer values(%d, '%s', %d, '%s', '%s')", spec.getId(),spec.getName(),spec.getAge(),gender,spec.getPhoneNum());
+        String query = String.format("insert into customer values(%d, '%s', %d, '%s', '%s')", spec.getId(), spec.getName(), spec.getAge(), gender, spec.getPhoneNum());
         s.executeUpdate(query);
     }
     

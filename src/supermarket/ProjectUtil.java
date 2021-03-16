@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
 
@@ -39,10 +40,13 @@ public abstract class ProjectUtil {
         ResultSet r = s.executeQuery(query);
         return DbUtils.resultSetToTableModel(r);
     }
-    public static void delete(Connection con, String table, int id) throws SQLException{
+    public static void delete(Connection con, String table, int id, JTable jTable) throws SQLException{
         Statement s = con.createStatement();
         String query = String.format("DELETE FROM %s WHERE %s_id ='%d'",table,table, id);
         int r = s.executeUpdate(query);
+        
+        jTable.setModel(ProjectUtil.fetchToTableModel(con, table));
+
     }
 
 }

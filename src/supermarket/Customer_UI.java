@@ -161,8 +161,7 @@ public class Customer_UI extends javax.swing.JFrame {
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         // TODO add your handling code here:
         try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection
-            ProjectUtil.delete(con, table, (int)jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-            jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
+            ProjectUtil.delete(con, table, (int)jTable1.getValueAt(jTable1.getSelectedRow(), 0), jTable1);
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }catch(ArrayIndexOutOfBoundsException e){
@@ -199,12 +198,8 @@ public class Customer_UI extends javax.swing.JFrame {
                     throw new Exception("Please enter a Proper name.");
                 }
                 
-             
-               
-          
-                
 
-                try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection
+                try(Connection con = ProjectUtil.getcon()){     //try-with-resources will auto close connection                    System.out.println(customer.getSpec());
                     customer.update(con);
                     jTable1.setModel(ProjectUtil.fetchToTableModel(con, table));
                 }

@@ -12,9 +12,8 @@ package supermarket;
 public class PersonSpec {
     private String name, phone_num;
     private int age, id;
-    private double a7a;
     
-    public PersonSpec(String name, String phone_num, int age, int id, double a7a) throws Exception{
+    public PersonSpec(String name, String phone_num, int age, int id) throws Exception{
         this.name = name;
 //        
         if(age < 18 || age > 65) throw new Exception("Wrong age!");
