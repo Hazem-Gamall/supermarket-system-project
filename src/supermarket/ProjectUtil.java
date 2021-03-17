@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
@@ -47,6 +48,12 @@ public abstract class ProjectUtil {
         
         jTable.setModel(ProjectUtil.fetchToTableModel(con, table));
 
+    }
+    
+    public static void switchFrame(JFrame oldFrame, JFrame newFrame){
+        oldFrame.setVisible(false);
+        oldFrame.dispose();
+        newFrame.setVisible(true);
     }
 
 }

@@ -191,10 +191,7 @@ public class Product_UI extends javax.swing.JFrame {
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        Welcome w = new Welcome();
-        w.setVisible(true);
-        this.dispose();
+        ProjectUtil.switchFrame(this, new Welcome());
     }//GEN-LAST:event_backButtonActionPerformed
 
     /**

@@ -115,35 +115,22 @@ public class Welcome extends javax.swing.JFrame {
 
     private void customersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customersActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        Customer_UI c = new Customer_UI();
-        c.setVisible(true);
-        this.dispose();
+        ProjectUtil.switchFrame(this, new Customer_UI());
     }//GEN-LAST:event_customersActionPerformed
 
     private void productsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        Product_UI p = new Product_UI();
-        p.setVisible(true);
-        this.dispose();
+        ProjectUtil.switchFrame(this, new Product_UI());
     }//GEN-LAST:event_productsActionPerformed
 
     private void sal_employeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sal_employeeActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        SalEmployeeUI s = new SalEmployeeUI();
-        s.setVisible(true);
-        this.dispose();
+        ProjectUtil.switchFrame(this, new SalEmployeeUI());
     }//GEN-LAST:event_sal_employeeActionPerformed
 
     private void hour_employeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hour_employeeActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        HourlyEmplyeeUI h = new HourlyEmplyeeUI();
-        h.setVisible(true);
-        this.dispose();
-
+        ProjectUtil.switchFrame(this, new HourlyEmplyeeUI());
     }//GEN-LAST:event_hour_employeeActionPerformed
 
     /**
